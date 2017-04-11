@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class cameraScript : MonoBehaviour
 {
+    bool isZLook;
     float distance = 2f;
     float xSpeed = 5.0f;
     float ySpeed = 5.0f;
@@ -23,6 +24,7 @@ public class cameraScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        isZLook = false;
         setAsEditor();
     }
 

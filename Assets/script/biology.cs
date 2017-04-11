@@ -8,6 +8,7 @@ public class biology : MonoBehaviour
     float speed;
     void Start()
     {
+        goPos = transform.position;
         GetComponent<Animator>().SetBool("Grounded", true);
     }
     void Update()
