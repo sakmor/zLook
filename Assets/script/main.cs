@@ -36,13 +36,18 @@ public class main : MonoBehaviour
     }
     Vector3 transformJoyStickSpace(Vector2 vec, Transform t)
     {
-
+        //取得攝影機朝前、朝右向量
         Vector3 forward = new Vector3(t.transform.forward.x, 0, t.transform.forward.z);
-        forward = Vector3.Normalize(forward);
-        forward *= vec.y;
         Vector3 right = new Vector3(t.transform.right.x, 0, t.transform.right.z);
+
+        //將左右向量標準化（變成最短）
+        forward = Vector3.Normalize(forward);
         right = Vector3.Normalize(right);
+
+        //將標準化左右向量加上搖桿的放大量
         right *= vec.x;
+        forward *= vec.y;
+
         return forward + right;
     }
     public Transform getPlayerTransform()
