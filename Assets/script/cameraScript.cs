@@ -18,8 +18,8 @@ public class cameraScript : MonoBehaviour
     private main main;
     float x = 0.0f, startX = 0.0f, finalX = 0.0f, y = 0.0f;
     Vector3 cam2Target;
-    Transform target;
-    public Transform lookTarget;
+    public Transform target;
+
     // Use this for initialization
     void Start()
     {
@@ -31,7 +31,7 @@ public class cameraScript : MonoBehaviour
         mouseOrbitWhenMouseInput();
         cameraFollow();
     }
-    void mouseOrbit()
+    public void mouseOrbit()
     {
         x += Input.GetAxis("Mouse X") * xSpeed;
         y -= Input.GetAxis("Mouse Y") * ySpeed;
@@ -40,9 +40,8 @@ public class cameraScript : MonoBehaviour
         distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
         Vector3 position = rotation * new Vector3(0.0f, 0.0f, -distance) + offset;
         transform.rotation = rotation;
-        transform.position = position + lookTarget.position;
-
-        setCame2Target();
+        transform.position = position + target.position;
+        setCame2target();
     }
     void mouseOrbitWhenMouseInput()
     {
@@ -65,18 +64,17 @@ public class cameraScript : MonoBehaviour
     }
     public void setTarget(Transform n)
     {
-        target = n;
-        lookTarget = n;
+        target = n.Find("N1");  //todo:當目標沒有N1點的時候會當機
+        mouseOrbit();
     }
     public void setOffset(Vector3 n)
     {
         offset = n;
         mouseOrbit();
     }
-    void setCame2Target()
+    void setCame2target()
     {
-        if (target)
-            cam2Target = transform.position - target.position;
+        cam2Target = transform.position - target.position;
     }
     void setAsEditor()
     {
@@ -84,4 +82,10 @@ public class cameraScript : MonoBehaviour
         x = angles.y;
         y = angles.x;
     }
+
+    public void setDistance(float n)
+    {
+        distance = n;
+    }
+
 }
