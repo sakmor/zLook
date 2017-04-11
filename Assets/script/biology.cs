@@ -5,21 +5,25 @@ using UnityEngine;
 public class biology : MonoBehaviour
 {
     Vector3 goPos;
+    float speed;
     void Start()
     {
         GetComponent<Animator>().SetBool("Grounded", true);
     }
     void Update()
     {
-
+        moveto();
+    }
+    void moveto()
+    {
+        speed = Vector3.Distance(transform.position, goPos);
+        transform.position = Vector3.MoveTowards(transform.position, goPos, 0.01f + speed * Time.deltaTime);
+        faceTarget(goPos, speed * 5);
+        GetComponent<Animator>().SetFloat("MoveSpeed", speed);
     }
     public void setMoveTo(Vector3 direct)
     {
-        goPos = transform.position + direct;
-        float speed = Vector3.Distance(Vector3.zero, direct);
-        transform.position = Vector3.MoveTowards(transform.position, goPos, 2 * speed * Time.deltaTime);
-        faceTarget(goPos, speed * 5);
-        GetComponent<Animator>().SetFloat("MoveSpeed", speed);
+        goPos = transform.position + direct * 0.5f;
     }
     void faceTarget(Vector3 etarget, float espeed)
     {
