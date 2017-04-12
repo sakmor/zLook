@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class cameraZLookScript : MonoBehaviour
 {
-    public Transform lookTarget, followTarget;
+    Transform lookTarget, followTarget;
     Vector3 cam2Target;
     bool isZLook;
 
@@ -20,9 +20,12 @@ public class cameraZLookScript : MonoBehaviour
     {
         if (isZLook)
         {
-            // transform.LookAt(lookTarget);
-            // cameraFollow();
+            var dir = Vector3.Normalize(lookTarget.position - followTarget.position);
+            dir = new Vector3(dir.x, 0, dir.z);
+            transform.position = followTarget.position + dir * -1.25f + Vector3.up * 1.25f;
+            transform.LookAt(lookTarget);
         }
+
     }
     void cameraFollow()
     {
@@ -51,7 +54,7 @@ public class cameraZLookScript : MonoBehaviour
         {
             isZLook = true;
             setLookTarget(t);
-            transform.position = followTarget.position;
+
             // setCame2target();
         }
     }

@@ -36,13 +36,14 @@ public class main : MonoBehaviour
 
         if (Input.GetKey("left shift"))
         {
-            player.transform.LookAt(target.position);
+            // player.transform.LookAt(target.position);
             useZLookCam();
             camZLook.setZLookOn(target);
             isZLook = true;
         }
         if (Input.GetKeyUp("left shift"))
         {
+            camZLook.setZLookOff();
             useNormalCam();
             isZLook = false;
         }
@@ -51,7 +52,7 @@ public class main : MonoBehaviour
         {
             if (isZLook)
             {
-                newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, player.transform);
+                newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, cam.transform);
             }
             else
             {
