@@ -8,13 +8,14 @@ public class main : MonoBehaviour
     cameraScript cam;
     cameraZLookScript camZLook;
     biology player;
-    Transform target;
+    GameObject[] targets;
+    GameObject target;
     bool isZLook;
 
     // Use this for initialization
     void Start()
     {
-        target = GameObject.Find("player (1)").transform;
+        targets = GameObject.FindGameObjectsWithTag("blue");
         cam = GameObject.Find("Main Camera").GetComponent<cameraScript>();
         camZLook = GameObject.Find("cameraZLook").GetComponent<cameraZLookScript>();
         visualJoyStick = GameObject.Find("visualJoyStick").GetComponent<visualJoyStick>();
@@ -27,6 +28,25 @@ public class main : MonoBehaviour
     void Update()
     {
         controlPlayer();
+        searchClosetTarget();
+
+    }
+    void searchClosetTarget()
+    {
+        float dist = Mathf.Infinity;
+        GameObject tempTarget = null;
+        foreach (var t in targets)
+        {
+            float temp = Vector3.Distance(t.transform.position, player.transform.position);
+            if (temp < dist)
+            {
+                tempTarget = t;
+                dist = temp;
+            }
+        }
+        //todo: 暫時標示用
+        GameObject.Find("Cube").transform.position = tempTarget.transform.position + Vector3.up * 1.2f;
+        target = tempTarget;
     }
 
     void controlPlayer()
@@ -36,29 +56,21 @@ public class main : MonoBehaviour
 
         if (Input.GetKey("left shift"))
         {
-            // player.transform.LookAt(target.position);
             useZLookCam();
             camZLook.setZLookOn(target);
             isZLook = true;
         }
         if (Input.GetKeyUp("left shift"))
         {
-            camZLook.setZLookOff();
             useNormalCam();
             isZLook = false;
         }
 
         if (visualJoyStick.touch)
         {
+            newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, cam.transform);
             if (isZLook)
-            {
-                newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, cam.transform);
-            }
-            else
-            {
-                newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, cam.transform);
-            }
-
+                newDirect = transformJoyStickSpace(visualJoyStick.joyStickVec, camZLook.transform);
             player.setMoveTo(newDirect);
         }
 
@@ -70,9 +82,12 @@ public class main : MonoBehaviour
     }
     void useNormalCam()
     {
+        cam.setPos(camZLook.transform);
         cam.GetComponent<Camera>().enabled = true;
         camZLook.GetComponent<Camera>().enabled = false;
     }
+
+    //將 參數一 的2D向量，改為 參數二 Transform為座標空間
     Vector3 transformJoyStickSpace(Vector2 vec, Transform t)
     {
         //取得Transform t的朝前、朝右向量

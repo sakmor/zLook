@@ -17,14 +17,16 @@ public class biology : MonoBehaviour
     }
     void moveto()
     {
-        speed = Vector3.Distance(transform.position, goPos) * 2.5f;
-        transform.position = Vector3.MoveTowards(transform.position, goPos, speed * Time.deltaTime);
+        float scale = 2.5f;
+        speed = Vector3.Distance(transform.position, goPos);
+        transform.position = Vector3.MoveTowards(transform.position, goPos, scale * speed * Time.deltaTime);
         faceTarget(goPos, speed * 5);
         GetComponent<Animator>().SetFloat("MoveSpeed", speed);
     }
     public void setMoveTo(Vector3 direct)
     {
-        goPos = transform.position + direct * 0.25f;
+        float scale = 0.5f;
+        goPos = transform.position + direct * scale;
     }
     void faceTarget(Vector3 etarget, float espeed)
     {

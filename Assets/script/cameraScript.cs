@@ -11,13 +11,12 @@ public class cameraScript : MonoBehaviour
     float distance = 2f;
     float xSpeed = 5.0f;
     float ySpeed = 5.0f;
-    public Vector3 offset;
     float yMinLimit = -20f;
     float yMaxLimit = 80f;
     float distanceMin = 1f;
     float distanceMax = 3f;
     private main main;
-    float x = 0.0f, startX = 0.0f, finalX = 0.0f, y = 0.0f;
+    public float x = 0.0f, startX = 0.0f, finalX = 0.0f, y = 0.0f;
     Vector3 cam2Target;
     public Transform target;
 
@@ -40,11 +39,13 @@ public class cameraScript : MonoBehaviour
         y = ClampAngle(y, yMinLimit, yMaxLimit);
         Quaternion rotation = Quaternion.Euler(y, x, 0);
         distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
-        Vector3 position = rotation * new Vector3(0.0f, 0.0f, -distance) + offset;
+        Vector3 position = rotation * new Vector3(0.0f, 0.0f, -distance);
         transform.rotation = rotation;
         transform.position = position + target.position;
         setCame2target();
     }
+
+
     void mouseOrbitWhenMouseInput()
     {
         if (Input.GetMouseButton(0) && !EventSystem.current.currentSelectedGameObject)
@@ -69,11 +70,7 @@ public class cameraScript : MonoBehaviour
         target = n.Find("N1");  //todo:當目標沒有N1點的時候會當機
         mouseOrbit();
     }
-    public void setOffset(Vector3 n)
-    {
-        offset = n;
-        mouseOrbit();
-    }
+
     void setCame2target()
     {
         cam2Target = transform.position - target.position;
@@ -85,9 +82,11 @@ public class cameraScript : MonoBehaviour
         y = angles.x;
     }
 
-    public void setDistance(float n)
+    public void setPos(Transform n)
     {
-        distance = n;
+        y = n.eulerAngles.x;
+        x = n.eulerAngles.y;
+        mouseOrbit();
     }
 
 }
